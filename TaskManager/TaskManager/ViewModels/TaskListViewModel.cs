@@ -17,12 +17,15 @@ namespace TaskManager.ViewModels
 
         public ICommand AddTaskCommand { get; }
 
+        public ICommand RemoveTaskCommand { get; }
+
         public TaskListViewModel(ITaskService taskService)
         {
             _taskService = taskService;
             Tasks = new ObservableCollection<TaskModel>(taskService.GetTasks());
 
-            AddTaskCommand = new RelayCommand(AddTask);
+            AddTaskCommand = new RelayCommand<TaskModel>(AddTask);
+            RemoveTaskCommand = new RelayCommand<TaskModel>(RemoveTask);
         }
 
         private void AddTask()
@@ -34,6 +37,12 @@ namespace TaskManager.ViewModels
                 NewTaskTitle = string.Empty;
                 OnPropertyChanged(nameof(NewTaskTitle));
             }
+        }
+
+        private void RemoveTask(TaskModel task)
+        {
+            if (Tasks.Contains(task))
+                Tasks.Remove(task);
         }
     }
 }

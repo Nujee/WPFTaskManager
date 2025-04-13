@@ -15,6 +15,10 @@
 						<StackPanel Orientation="Horizontal">
 							<CheckBox IsChecked="{Binding IsCompleted}" Margin="5"/>
 							<TextBlock Text="{Binding Title}" Margin="5"/>
+							<Button Content="❌" 
+								Command="{Binding DataContext.RemoveTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+								CommandParameter="{Binding}" 
+								Margin="5"/>
 						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
