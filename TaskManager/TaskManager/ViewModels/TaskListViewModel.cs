@@ -24,7 +24,7 @@ namespace TaskManager.ViewModels
             _taskService = taskService;
             Tasks = new ObservableCollection<TaskModel>(taskService.GetTasks());
 
-            AddTaskCommand = new RelayCommand<TaskModel>(AddTask);
+            AddTaskCommand = new RelayCommand(AddTask);
             RemoveTaskCommand = new RelayCommand<TaskModel>(RemoveTask);
         }
 
