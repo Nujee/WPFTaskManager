@@ -16,11 +16,7 @@ namespace TaskManager.Helpers
 
         public bool CanExecute(object parameter) => _canExecute?.Invoke() ?? true;
 
-        public void Execute(object parameter)
-        {
-            Console.WriteLine("Executing AddTask...");
-            _execute();
-        }
+        public void Execute(object parameter) => _execute();
 
         public event EventHandler CanExecuteChanged;
     }
