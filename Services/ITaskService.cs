@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TaskManager.Models;
+﻿using TaskManager.Models;
 
 namespace TaskManager.Services
 {

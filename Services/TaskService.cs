@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using TaskManager.Models;
+﻿using TaskManager.Models;
 
 namespace TaskManager.Services
 {
     public sealed class TaskService : ITaskService
     {
-        private readonly List<TaskModel> _tasks = new List<TaskModel>();
+        private readonly List<TaskModel> _tasks = [];
 
         public List<TaskModel> GetTasks() => _tasks;
 

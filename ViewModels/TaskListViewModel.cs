@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TaskManager.Helpers;
 using TaskManager.Models;
@@ -22,7 +21,7 @@ namespace TaskManager.ViewModels
         public TaskListViewModel(ITaskService taskService)
         {
             _taskService = taskService;
-            Tasks = new ObservableCollection<TaskModel>(taskService.GetTasks());
+            Tasks = [.. taskService.GetTasks()];
 
             AddTaskCommand = new RelayCommand(AddTask);
             RemoveTaskCommand = new RelayCommand<TaskModel>(RemoveTask);

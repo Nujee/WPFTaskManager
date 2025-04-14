@@ -1,0 +1,29 @@
+﻿<Window x:Class="TaskManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:TaskManager.ViewModels"
+		Title="Task Manager" Height="350" Width="525">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBox Width="300" Text="{Binding NewTaskTitle, UpdateSourceTrigger=PropertyChanged}" Margin="5
+"/>
+                <Button Content="Add" Command="{Binding AddTaskCommand}" Margin="5"/>
+            </StackPanel>
+
+            <ListBox ItemsSource="{Binding Tasks}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsCompleted}" Margin="5"/>
+                            <TextBlock Text="{Binding Title}" Margin="5"/>
+                            <Button Content="❌" 
+								Command="{Binding DataContext.RemoveTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+								CommandParameter="{Binding}" 
+								Margin="5"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</Window>
