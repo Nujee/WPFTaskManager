@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using TaskManager.Helpers;
 using TaskManager.Models;
 using TaskManager.Services;
@@ -10,8 +9,6 @@ namespace TaskManager.ViewModels
     {
         private readonly ITaskService _taskService;
 
-        public ObservableCollection<TaskModel> Tasks { get; }
-
         public string NewTaskTitle { get; set; }
 
         public ICommand AddTaskCommand { get; }
@@ -21,7 +18,6 @@ namespace TaskManager.ViewModels
         public TaskListViewModel(ITaskService taskService)
         {
             _taskService = taskService;
-            Tasks = [.. taskService.GetTasks()];
 
             AddTaskCommand = new RelayCommand(AddTask);
             RemoveTaskCommand = new RelayCommand<TaskModel>(RemoveTask);
@@ -32,20 +28,18 @@ namespace TaskManager.ViewModels
             if (!string.IsNullOrWhiteSpace(NewTaskTitle))
             {
                 var task = new TaskModel { Title = NewTaskTitle };
-                Tasks.Add(task);
+                _taskService.AddTask(task);
                 NewTaskTitle = string.Empty;
                 OnPropertyChanged(nameof(NewTaskTitle));
 
-                _taskService.SaveTasks(Tasks);
+                _taskService.SaveTasks();
             }
         }
 
         private void RemoveTask(TaskModel task)
         {
-            if (Tasks.Contains(task))
-                Tasks.Remove(task);
-
-            _taskService.SaveTasks(Tasks);
+            _taskService.RemoveTask(task);
+            _taskService.SaveTasks();
         }
     }
 }
