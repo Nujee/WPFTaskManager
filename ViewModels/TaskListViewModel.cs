@@ -21,7 +21,7 @@ namespace TaskManager.ViewModels
         public TaskListViewModel(ITaskService taskService)
         {
             _taskService = taskService;
-            Tasks = [.. taskService.GetTasks()];
+            Tasks = [.. taskService.LoadTasks()];
 
             AddTaskCommand = new RelayCommand(AddTask);
             RemoveTaskCommand = new RelayCommand<TaskModel>(RemoveTask);
@@ -35,6 +35,8 @@ namespace TaskManager.ViewModels
                 Tasks.Add(task);
                 NewTaskTitle = string.Empty;
                 OnPropertyChanged(nameof(NewTaskTitle));
+
+                _taskService.SaveTasks([.. Tasks]);
             }
         }
 
@@ -42,6 +44,8 @@ namespace TaskManager.ViewModels
         {
             if (Tasks.Contains(task))
                 Tasks.Remove(task);
+            
+            _taskService.SaveTasks([.. Tasks]);
         }
     }
 }

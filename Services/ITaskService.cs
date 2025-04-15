@@ -4,7 +4,7 @@ namespace TaskManager.Services
 {
     public interface ITaskService
     {
-        List<TaskModel> GetTasks();
-        void AddTask(TaskModel task);
+        List<TaskModel> LoadTasks();
+        void SaveTasks(List<TaskModel> tasks);
     }
 }

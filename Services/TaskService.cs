@@ -1,13 +1,23 @@
-﻿using TaskManager.Models;
+﻿using System.IO;
+using System.Text.Json;
+using TaskManager.Models;
 
 namespace TaskManager.Services
 {
     public sealed class TaskService : ITaskService
     {
-        private readonly List<TaskModel> _tasks = [];
+        private const string FilePath = "tasks.json";
 
-        public List<TaskModel> GetTasks() => _tasks;
+        public List<TaskModel> LoadTasks()
+        {
+            if (File.Exists(FilePath))
+                return JsonSerializer.Deserialize<List<TaskModel>>(File.ReadAllText(FilePath));
+            return [];
+        }
 
-        public void AddTask(TaskModel task) => _tasks.Add(task);
+        public void SaveTasks(List<TaskModel> tasks)
+        {
+            File.WriteAllText(FilePath, JsonSerializer.Serialize(tasks));
+        }
     }
 }
