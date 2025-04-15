@@ -6,7 +6,6 @@ namespace TaskManager.Services
     {
         List<TaskModel> GetTasks();
         void AddTask(TaskModel task);
-        void RemoveTask(TaskModel task);
-        void SaveTasks();
+        void SaveTasks(IEnumerable<TaskModel> tasks);
     }
 }

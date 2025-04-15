@@ -12,30 +12,18 @@ namespace TaskManager.Services
 
         public List<TaskModel> GetTasks()
         {
-            try
-            {
-                if (!File.Exists(FilePath))
-                    return [];
-
-                string jsonText = File.ReadAllText(FilePath);
-                var tasks = JsonSerializer.Deserialize<List<TaskModel>>(jsonText);
-
-                return tasks ?? [];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при загрузке задач: {ex.Message}");
-                return [];
-            }
+            if (File.Exists(FilePath))
+                return JsonSerializer.Deserialize<List<TaskModel>>(File.ReadAllText(FilePath));
+            return [];
         }
 
         public void AddTask(TaskModel task) => _tasks.Add(task);
 
         public void RemoveTask(TaskModel task) => _tasks.Remove(task);
 
-        public void SaveTasks()
+        public void SaveTasks(IEnumerable<TaskModel> tasks)
         {
-            File.WriteAllText(FilePath, JsonSerializer.Serialize(_tasks));
+            File.WriteAllText(FilePath, JsonSerializer.Serialize(tasks));
         }
     }
 }
