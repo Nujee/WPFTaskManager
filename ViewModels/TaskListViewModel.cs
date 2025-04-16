@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using TaskManager.Helpers;
 using TaskManager.Models;
@@ -6,25 +8,36 @@ using TaskManager.Services;
 
 namespace TaskManager.ViewModels
 {
-    public sealed class TaskListViewModel : ViewModelBase
+    public sealed class TaskListViewModel : ViewModelBase, IDisposable
     {
         private readonly ITaskService _taskService;
+        private string _newTaskTitle;
 
-        public ObservableCollection<TaskModel> Tasks { get; }
-
-        public string NewTaskTitle { get; set; }
-
+        public ObservableCollection<TaskModel> Tasks { get; } = [];
+        public string NewTaskTitle
+        {
+            get => _newTaskTitle;
+            set
+            {
+                _newTaskTitle = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand AddTaskCommand { get; }
-
         public ICommand RemoveTaskCommand { get; }
 
         public TaskListViewModel(ITaskService taskService)
         {
+            Debug.WriteLine("TaskListVewModel is created");
             _taskService = taskService;
-            Tasks = [.. taskService.LoadTasks()];
+            _taskService.LoadTasks();
+
+            Tasks = [.. _taskService.GetTasks()];
 
             AddTaskCommand = new RelayCommand(AddTask);
             RemoveTaskCommand = new RelayCommand<TaskModel>(RemoveTask);
+
+            _taskService.TasksChanged += OnTasksChanged;
         }
 
         private void AddTask()
@@ -32,20 +45,22 @@ namespace TaskManager.ViewModels
             if (!string.IsNullOrWhiteSpace(NewTaskTitle))
             {
                 var task = new TaskModel { Title = NewTaskTitle };
-                Tasks.Add(task);
+                _taskService.AddTask(task);
                 NewTaskTitle = string.Empty;
-                OnPropertyChanged(nameof(NewTaskTitle));
-
-                _taskService.SaveTasks([.. Tasks]);
             }
         }
 
-        private void RemoveTask(TaskModel task)
+        private void RemoveTask(TaskModel task) => _taskService.RemoveTask(task);
+
+        private void OnTasksChanged(object sender, EventArgs e)
         {
-            if (Tasks.Contains(task))
-                Tasks.Remove(task);
-            
-            _taskService.SaveTasks([.. Tasks]);
+            Tasks.Clear();
+            foreach (var task in _taskService.GetTasks())
+            {
+                Tasks.Add(task);
+            }
         }
+
+        public void Dispose() =>_taskService.TasksChanged -= OnTasksChanged;
     }
 }

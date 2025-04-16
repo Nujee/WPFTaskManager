@@ -4,7 +4,11 @@ namespace TaskManager.Services
 {
     public interface ITaskService
     {
-        List<TaskModel> LoadTasks();
-        void SaveTasks(List<TaskModel> tasks);
+        IEnumerable<TaskModel> GetTasks();
+        void AddTask(TaskModel task);
+        void RemoveTask(TaskModel task);
+        void LoadTasks();
+        void SaveTasks();
+        event EventHandler TasksChanged;
     }
 }
