@@ -12,26 +12,6 @@ namespace TaskManager.Services
         private List<TaskModel> _tasks = [];
         public event EventHandler TasksChanged;
 
-        public IEnumerable<TaskModel> GetTasks() => [.. _tasks];
-
-        public void AddTask(TaskModel task)
-        {
-            _tasks.Add(task);
-            task.PropertyChanged += OnTaskPropertyChanged;
-
-            NotifyTasksChanged();
-            SaveTasks();
-        }
-
-        public void RemoveTask(TaskModel task)
-        {
-            task.PropertyChanged -= OnTaskPropertyChanged;
-            _tasks.Remove(task);
-
-            NotifyTasksChanged();
-            SaveTasks();
-        }
-
         public void LoadTasks()
         {
             try
@@ -51,7 +31,6 @@ namespace TaskManager.Services
             }
         }
 
-
         public void SaveTasks()
         {
             try
@@ -64,6 +43,25 @@ namespace TaskManager.Services
             }
         }
 
+        public IEnumerable<TaskModel> GetTasks() => [.. _tasks];
+
+        public void AddTask(TaskModel task)
+        {
+            _tasks.Add(task);
+            task.PropertyChanged += OnTaskPropertyChanged;
+
+            NotifyTasksChanged();
+            SaveTasks();
+        }
+
+        public void RemoveTask(TaskModel task)
+        {
+            task.PropertyChanged -= OnTaskPropertyChanged;
+            _tasks.Remove(task);
+
+            NotifyTasksChanged();
+            SaveTasks();
+        }
 
         private void OnTaskPropertyChanged(object sender, PropertyChangedEventArgs e) => SaveTasks();
 
